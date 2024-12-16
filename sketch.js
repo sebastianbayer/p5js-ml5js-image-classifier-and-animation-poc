@@ -1,18 +1,14 @@
 let classifier;
 let video;
 let label = "waiting...";
-let animation;
+let video1;
+
 
 function preload() {
   // load image classifier
   classifier = ml5.imageClassifier(
     "https://teachablemachine.withgoogle.com/models/tOy9_dQ3Y/"
   );
-
-  // load animation
-  animation = createVideo(["media/test-video.mp4"]);
-  animation.loop(); // Animation im Loop abspielen
-  animation.hide(); // Video-Element selbst verstecken
 }
 
 function gotResults(results) {
@@ -21,7 +17,8 @@ function gotResults(results) {
 }
 
 function setup() {
-  createCanvas(640, 480);
+  var canvas = createCanvas(640, 480);
+  canvas.parent('p5js-wrapper');
 
   // define video stream from webcam
   video = createCapture(VIDEO, { flipped: true });
@@ -29,17 +26,27 @@ function setup() {
   video.hide();
 
   classifier.classifyStart(video, gotResults);
+  video1 = document.getElementById("video-1");
+  video2 = document.getElementById("video-2");
+  video3 = document.getElementById("video-3");
 }
 
 function draw() {
-  // set background to light gray
-  background(220);
-
-  // render animation
-  image(animation, 0, 0, width, height);
-  
   // render video
   image(video, 0, 0);
+
+  // if bottle is detected
+  if (label === "bottle") {
+    console.log("Bottle detected -> show video-1");
+    video1.classList.add("visible");
+    video1.play()
+  } else {
+    console.log("Bottle not detected -> hide video-1");
+    video1.classList.remove("visible");
+    setTimeout(() => {
+      video1.currentTime = 0; // reset video to start frame after a delay of 0.8s (50ms after css transition)
+    }, 800);
+  }
 
   // text background
   rectMode(CENTER);
@@ -55,6 +62,3 @@ function draw() {
   // render label
   text(label, width / 2, height - 20);
 }
-
-// function to play the animation
-function playAnimation() {}
