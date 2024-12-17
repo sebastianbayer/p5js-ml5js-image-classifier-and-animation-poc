@@ -1,11 +1,16 @@
 html,
 body {
-  margin: 0;
-  padding: 0;
-  width: 640px;
-  height: 480px;  
-  position: relative;
+  body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100vh; /* Full height of the window */
+    width: 100vw; /* Full width of the window */
+  }
+  
+  
 }
+
 canvas {
   display: block;
 }
